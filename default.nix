@@ -44,17 +44,17 @@ let
     </project>
   '';
   mvnRepo = linkFarm "mvn-repo" (lib.flatten (lib.mapAttrsToList (name: {src, artifactId, version, groupId, ...}:
-    let nameSansExt = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}/${artifactId}-${version}";
+    let nameSansExt = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}/${artifactId}-${version}"; in
     [
-    {
-      name = "${nameSansExt}.jar";
-      path = src.jar;
-    }
-    {
-      name = "${nameSansExt}.pom";
-      path = pom { inherit packages name; };
-    }
-  ]) (lib.filterAttrs (n: v: v.src ? jar) packages)));
+      {
+        name = "${nameSansExt}.jar";
+        path = src.jar;
+      }
+      {
+        name = "${nameSansExt}.pom";
+        path = pom { inherit packages name; };
+      }
+    ]) (lib.filterAttrs (n: v: v.src ? jar) packages)));
 
   # localRoot = name:
   #   let inherit (packages.${name}) src artifactId version groupId; in
