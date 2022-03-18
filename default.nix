@@ -43,13 +43,15 @@ let
       ${lib.optionalString (deps != {}) "</dependencies>"}
     </project>
   '';
-  mvnRepo = linkFarm "mvn-repo" (lib.flatten (lib.mapAttrsToList (name: {src, artifactId, version, groupId, ...}: [
+  mvnRepo = linkFarm "mvn-repo" (lib.flatten (lib.mapAttrsToList (name: {src, artifactId, version, groupId, ...}:
+    let nameSansExt = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}/${artifactId}-${version}";
+    [
     {
-      name = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}/${artifactId}-${version}.jar";
+      name = "${nameSansExt}.jar";
       path = src.jar;
     }
     {
-      name = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}/${artifactId}-${version}.pom";
+      name = "${nameSansExt}.pom";
       path = pom { inherit packages name; };
     }
   ]) (lib.filterAttrs (n: v: v.src ? jar) packages)));
