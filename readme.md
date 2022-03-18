@@ -17,3 +17,4 @@ nix-shell
 clojure -X:build uber
 ```
 
+This starts breaking at nixpkgs commit fea6b0e497fbda44ad1afd66286dde8e2151f0d7, in other words the clojure upgrade from 1.10.3.855 to 1.10.3.933.
